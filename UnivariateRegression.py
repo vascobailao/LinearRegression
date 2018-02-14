@@ -37,6 +37,5 @@ class UnivariateLR(Regression):
     def run(self):
 
         m, b = self.get_params()
-
         self.plot_line_train(m, b)
 
