@@ -11,12 +11,11 @@ def main():
 
     new_reg = Regression.Regression(dic)
 
-    training_data, test_data = new_reg.split_data()
+    training_data = new_reg.split_data()
 
-    column_names = new_reg.get_columnNames(training_data)
+    lr = new_reg.run(training_data)
 
-    df, df1 = new_reg.get_data(column_names, training_data)
+    lr.run()
 
-
-
-main()
+if __name__ == "__main__":
+    main()

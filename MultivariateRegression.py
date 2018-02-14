@@ -6,14 +6,16 @@ mpl.use('TkAgg')
 
 class MultivariateLR(Regression):
 
-    def __init__(self, learning_rate, iterations):
+    def __init__(self, x, y, learning_rate, iterations):
+        self.x = x
+        self.y = y
         self.learning_rate = learning_rate
         self.B = np.zeros(self.size)
         self.iterations = iterations
 
     def cost_function(self):
-        self.cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
-        return self.cost
+        cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
+        return cost
 
     def gradient_descent(self):
         cost_history = [0] * self.iterations

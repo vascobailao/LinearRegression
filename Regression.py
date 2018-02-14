@@ -3,6 +3,7 @@ import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 mpl.use('TkAgg')
 import matplotlib.pyplot as plt
+from LinearRegression import MultivariateRegression, UnivariateRegression
 
 
 class Regression:
@@ -86,5 +87,16 @@ class Regression:
         ss_res = sum((y - y_hat) ** 2)
         r2 = 1 - (ss_res / ss_tot)
         return r2
+
+    def run(self, training_data):
+        x, y = self.get_data(self.get_columnNames(training_data), training_data)
+        if len(self.get_columnNames(training_data)) > 2:
+            lr = MultivariateRegression.MultivariateLR(x, y, 0.0001, 10000)
+            return lr
+        lr = UnivariateRegression.UnivariateLR(x, y)
+        return lr
+
+
+
 
 
