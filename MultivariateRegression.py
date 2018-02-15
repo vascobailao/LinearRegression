@@ -1,4 +1,4 @@
-from LinearRegression import Regression
+from Regression import Regression
 import numpy as np
 import matplotlib as mpl
 mpl.use('TkAgg')
@@ -10,6 +10,7 @@ class MultivariateLR(Regression):
         self.x = x
         self.y = y
         self.learning_rate = learning_rate
+        self.size = len(x)
         self.B = np.zeros(self.size)
         self.iterations = iterations
 
@@ -34,3 +35,9 @@ class MultivariateLR(Regression):
             cost_history[iteration] = cost
 
         return self.B, cost_history
+
+    def run(self, **kwargs):
+        cost = self.cost_function()
+        B, cost_history = self.gradient_descent()
+        return cost, B, cost_history
+

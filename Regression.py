@@ -3,7 +3,6 @@ import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 mpl.use('TkAgg')
 import matplotlib.pyplot as plt
-from LinearRegression import MultivariateRegression, UnivariateRegression
 
 
 class Regression:
@@ -37,6 +36,7 @@ class Regression:
         if self.dic["train"] is None:
             return None
         df = self.dic["train"]
+
         return df
 
     def get_testData(self):
@@ -91,12 +91,82 @@ class Regression:
     def run(self, training_data):
         x, y = self.get_data(self.get_columnNames(training_data), training_data)
         if len(self.get_columnNames(training_data)) > 2:
-            lr = MultivariateRegression.MultivariateLR(x, y, 0.0001, 10000)
+            lr = MultivariateLR(x, y, 0.0001, 10000)
             return lr
-        lr = UnivariateRegression.UnivariateLR(x, y)
+        lr = UnivariateLR(x, y)
         return lr
 
 
+class MultivariateLR(Regression):
+
+    def __init__(self, x, y, learning_rate, iterations):
+        self.x = x.T
+        self.y = y
+        self.size = len(x)
+        self.B = np.zeros((self.size,), dtype=int)
+        self.learning_rate = learning_rate
+        self.iterations = iterations
+
+    def cost_function(self):
+        cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
+        return cost
+
+    def gradient_descent(self):
+        cost_history = [0] * self.iterations
+
+        for iteration in range(self.iterations):
+
+            y_hat = self.x.dot(self.B)
+
+            loss = y_hat - self.y
+
+            gradient = self.x.T.dot(loss) / self.size
+
+            self.B = self.B - self.learning_rate * gradient
+
+            cost = self.cost_function()
+            cost_history[iteration] = cost
+
+        return self.B, cost_history
+
+    def run(self, **kwargs):
+        B, cost_history = self.gradient_descent()
+        return B, cost_history
 
 
+class UnivariateLR(Regression):
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.size = len(x)
+
+    def get_params(self):
+
+        first = self.size*np.sum(self.x*self.y) - (np.sum(self.y)*np.sum(self.x))
+        second = self.size*np.sum(self.x**2) - (np.sum(self.x))**2
+
+        m = first/second
+        b = (np.sum(self.y)-m*np.sum(self.x))/self.size
+        return m, b
+
+    def get_residuals(self, m, b):
+        self.residuals = np.sum((self.y-self.x*m-b)**2)
+        return self.residuals
+
+    def fit_LR(self, m, b):
+        return np.array(self.x*m + b)
+
+    def plot_line_train(self, m, b):
+
+        results = self.fit_LR(m, b)
+        plt.scatter(self.x, self.y, color="b", s=2)
+        plt.plot(self.x, results, '--', color="r")
+        plt.show()
+
+    def run(self, **kwargs):
+
+        m, b = self.get_params()
+        return m, b
+        #self.plot_line_train(m, b)
 

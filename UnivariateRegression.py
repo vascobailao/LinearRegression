@@ -1,4 +1,4 @@
-from LinearRegression import Regression
+from Regression import Regression
 import numpy as np
 import matplotlib as mpl
 mpl.use('TkAgg')
@@ -10,6 +10,7 @@ class UnivariateLR(Regression):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.size = len(x)
 
     def get_params(self):
 
@@ -34,7 +35,7 @@ class UnivariateLR(Regression):
         plt.plot(self.x, results, '--', color="r")
         plt.show()
 
-    def run(self):
+    def run(self, **kwargs):
 
         m, b = self.get_params()
         self.plot_line_train(m, b)
