@@ -1,3 +1,4 @@
+# Created by Vasco B. Fernandes
 import numpy as np
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
@@ -10,6 +11,9 @@ class Regression:
     def __init__(self, dic):
         self.dic = dic
 
+    '''
+    :returns {Pandas.Dataframe} training_data, test_data
+    '''
     def split_data(self):
         if len(self.dic) == 1:
             msk = np.random.rand(len(self.dic["data"])) < 0.8
@@ -21,17 +25,32 @@ class Regression:
         test_data = self.get_testData()
         return training_data, test_data
 
+    '''
+    :param {Pandas.Dataframe} training_data
+    :return {np.int64} 
+    '''
     def get_size(self, training_data):
         return np.size(training_data)
 
+    '''
+    :param {Pandas.Dataframe} training_data
+    :return {tuple} size
+    '''
     def get_shape(self, training_data):
         size = training_data.shape
         return size
 
+    '''
+    :param {Pandas,Dataframe} training_data
+    :return {list} column_names
+    '''
     def get_columnNames(self, training_data):
         columns_names = list(training_data.columns.values)
         return columns_names
 
+    '''
+    :return {Pandas.Dataframe} df
+    '''
     def get_trainingData(self):
         if self.dic["train"] is None:
             return None
@@ -39,18 +58,28 @@ class Regression:
 
         return df
 
+    '''
+    :return {Pandas.Dataframe} df
+    '''
     def get_testData(self):
         if self.dic["test"] is None:
             return None
         df = self.dic["test"]
         return df
 
+    '''
+    :return {Pandas.Dataframe} df
+    '''
     def get_validationData(self):
         if self.dic["valid"] is None:
             return None
         df = self.dic["valid"]
         return df
 
+    '''
+    :params {list} (column names), {Pandas.Dataframe} training data
+    :return {Numpy.Array} independent, dependent (variable)
+    '''
     def get_data(self, columns_names, training_data):
         size = len(columns_names)
 
@@ -63,8 +92,11 @@ class Regression:
         dependent = np.array(training_data.iloc[:, size-1]).flatten()
         return independent, dependent
 
+    '''
+    :param {Pandas.Dataframe} training_data, {Numpy.Array} independent, dependent (variables)
+    '''
     def plot_data(self, training_data, independent, dependent):
-        print(self.get_shape(training_data)[1])
+
         if self.get_shape(training_data)[1] == 1:
             plt.plot(independent, dependent, '.')
             plt.show()
@@ -78,10 +110,18 @@ class Regression:
         else:
             raise ValueError("Data too dimensional to plot")
 
+    '''
+    :params {Numpy.Array} y, y_hat
+    :return {int} rmse
+    '''
     def calculate_rmse(self, y, y_hat):
         rmse = np.sqrt(sum((y - y_hat) ** 2) / len(y))
         return rmse
 
+    '''
+    :params {Numpy.Array} y, y_hat
+    :return {int} r2
+    '''
     def calculate_r2(self, y, y_hat):
         mean_y = np.mean(y)
         ss_tot = sum((y - mean_y) ** 2)
@@ -89,11 +129,19 @@ class Regression:
         r2 = 1 - (ss_res / ss_tot)
         return r2
 
+    '''
+    :params {Numpy.Array} y, y_hat
+    :return {int} r2, rmse
+    '''
     def evaluate_model(self, y, y_hat):
         r2 = self.calculate_r2(y, y_hat)
         rmse = self.calculate_rmse(y, y_hat)
         return r2, rmse
 
+    '''
+    :param {Numpy.Array} training_data
+    :return {MultivariateLR or UnivariateLR} lr
+    '''
     def run(self, training_data):
         x, y = self.get_data(self.get_columnNames(training_data), training_data)
         if len(self.get_columnNames(training_data)) > 2:
@@ -115,14 +163,23 @@ class MultivariateLR(Regression):
         self.iterations = iterations
         self.x = self.prepare_x()
 
+    '''
+    :return {Numpy.Array} self.x
+    '''
     def prepare_x(self):
         self.x = np.concatenate((np.ones(self.size)[:, np.newaxis], self.x), axis=1)
         return self.x
 
+    '''
+    :return {int} cost
+    '''
     def cost_function(self):
         cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
         return cost
 
+    '''
+    :return {int} B, {list} cost_history
+    '''
     def gradient_descent(self):
         cost_history = [0] * self.iterations
 
@@ -142,14 +199,23 @@ class MultivariateLR(Regression):
 
         return B, cost_history
 
+    '''
+    :params {list} cost_history
+    '''
     def plot_cost(self, cost_history):
         plt.plot(self.iterations, cost_history)
         plt.show()
 
+    '''
+    :params {Numpy.Array} B
+    :return {Numpy.Array} y:hat
+    '''
     def predict(self, B):
         y_hat = self.x.dot(B)
         return y_hat
-
+    '''
+    :return {Numpy.Array} B
+    '''
     def run(self, **kwargs):
         B, cost_history = self.gradient_descent()
         return B

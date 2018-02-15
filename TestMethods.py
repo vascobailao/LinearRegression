@@ -1,6 +1,7 @@
 import unittest
 import Model, Regression, UnivariateRegression, MultivariateRegression
 import pandas as pd
+import numpy as np
 from pandas.util.testing import check_output
 
 class TestMethods(unittest.TestCase):
@@ -17,6 +18,9 @@ class TestMethods(unittest.TestCase):
         self.model2out = self.model2.set_dataframes(self.files)
         self.regression1 = Regression.Regression(self.model1out)
         self.regression2 = Regression.Regression(self.model2)
+
+
+    ## Model class
 
     def test_check_no_directory(self):
         self.assertRaises(ValueError, self.model3.set_files_in_directory)
@@ -40,6 +44,8 @@ class TestMethods(unittest.TestCase):
         self.assertIsInstance(output, dict)
 
 
+    ## Regression class
+
     def test_split_data1(self):
         output = self.regression1.split_data()
         self.assertIsInstance(output[0], pd.DataFrame)
@@ -48,9 +54,46 @@ class TestMethods(unittest.TestCase):
         output = self.regression1.split_data()
         self.assertIsInstance(output[1], pd.DataFrame)
 
+    def test_get_size(self):
+        tr, ts = self.regression1.split_data()
+        output = self.regression1.get_size(tr)
+        self.assertIsInstance(output, np.int64)
 
+    def test_get_shape(self):
+        tr, ts = self.regression1.split_data()
+        output = self.regression1.get_shape(tr)
+        self.assertIsInstance(output, tuple)
 
+    def test_get_column_names(self):
+        tr, ts = self.regression1.split_data()
+        output = self.regression1.get_columnNames(tr)
+        self.assertIsInstance(output, list)
 
+    def test_get_training_data(self):
+        output = self.regression1.get_trainingData()
+        self.assertIsInstance(output, pd.DataFrame)
+
+    def test_get_test_data(self):
+        output = self.regression1.get_testData()
+        self.assertIsInstance(output, pd.DataFrame)
+
+    def test_get_data(self):
+        tr, ts = self.regression1.split_data()
+        cols = self.regression1.get_columnNames(tr)
+        output = self.regression1.get_data(cols, tr)
+        self.assertIsInstance(output, tuple)
+
+    def test_get_data1(self):
+        tr, ts = self.regression1.split_data()
+        cols = self.regression1.get_columnNames(tr)
+        output = self.regression1.get_data(cols, tr)
+        self.assertIsInstance(output[0], np.ndarray)
+
+    def test_get_data2(self):
+        tr, ts = self.regression1.split_data()
+        cols = self.regression1.get_columnNames(tr)
+        output = self.regression1.get_data(cols, tr)
+        self.assertIsInstance(output[1], np.ndarray)
 
 
 def main():

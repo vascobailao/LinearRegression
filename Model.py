@@ -1,3 +1,4 @@
+# Created by Vasco B. Fernandes
 import ntpath
 import pandas as pd
 import os
@@ -8,17 +9,31 @@ class Model:
         self.input_dir = input_dir
         self.ext = ext
 
+    '''
+    :param {string} ext
+    :return {string} ext or ValueError
+    '''
     def check_ext(self, ext):
         if ext != ".csv":
-            raise ValueError("Wrong extension, please choose .csv files")
+            raise ValueError("Wrong extension, please load .csv files!")
         return ext
 
+    '''
+    :param {string} path
+    :return {Pandas.Dataframe}
+    '''
     def load_data(self, path):
         return pd.read_csv(path)
 
+    '''
+    :return {list} files
+    '''
     def set_files_in_directory(self):
 
         files = []
+        if not os.path.exists(self.input_dir):
+            raise ValueError("Directory does not exist!")
+
         for file in os.listdir(self.input_dir):
             if file.endswith(self.ext):
                 name = self.input_dir + "/" + file
@@ -26,6 +41,10 @@ class Model:
 
         return files
 
+    '''
+    :params {list} set_type, {list} files
+    :return {Pandas.Dataframe} df
+    '''
     def get_sets(self, set_type, files):
 
         df = None
@@ -34,6 +53,10 @@ class Model:
                 df = self.load_data(element)
         return df
 
+    '''
+    :param {list} files
+    :return {dictionary} df
+    '''
     def set_dataframes(self, files):
 
         df = {}

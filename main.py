@@ -18,10 +18,13 @@ def main():
 
     print(len(column_names))
 
-    print(new_reg.get_shape(training_data)[1])
+    print(new_reg.get_size(training_data))
 
-    ind, dep = new_reg.get_data(columns_names=column_names, training_data=training_data)
+    print(new_reg.get_shape(training_data))
 
+    a = new_reg.get_data(columns_names=column_names, training_data=training_data)
+    print("aaa")
+    print(type(a))
     lr = new_reg.run(training_data)
 
     if lr.__class__.__name__ == "UnivariateLR":
