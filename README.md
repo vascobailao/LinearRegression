@@ -43,7 +43,7 @@ python TestMethods.py
 
 ## Future Work
 
-* Watchdog - Using the "watchdog" package, check periodically for new files in the data directory
+* Folder watching - Using the "watchdog" package, check periodically for new files in the data directory
 * Extend to other models (classification, etc)
 * Extend to other linear regression models
 
