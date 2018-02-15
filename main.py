@@ -4,7 +4,7 @@ import Regression as rg
 
 def main():
 
-    new_model = Model.Model("./data/simple", ".csv")
+    new_model = Model.Model("./data/student", ".csv")
 
     files = new_model.set_files_in_directory()
 
@@ -16,29 +16,20 @@ def main():
 
     column_names = new_reg.get_columnNames(training_data)
 
-    print(len(column_names))
-
-    print(new_reg.get_size(training_data))
-
-    print(new_reg.get_shape(training_data))
-
-
-    a = new_reg.get_data(columns_names=column_names, training_data=training_data)
-    print("aaa")
-    print(type(a))
+    ind, dep = new_reg.get_data(columns_names=column_names, training_data=training_data)
 
     lr = new_reg.run(training_data)
-    m, b = lr.get_params()
-    print(lr.get_residuals(m, b))
 
     if lr.__class__.__name__ == "UnivariateLR":
         m, b = lr.run()
+        print(m, b)
         y_hat = lr.predict(m, b)
-        lr.evaluate_model(ind, y_hat)
+        print(lr.evaluate_model(ind, y_hat))
     elif lr.__class__.__name__ == "MultivariateLR":
         B = lr.run()
+        print(B)
         y_hat = lr.predict(B)
-        lr.evaluate_model(ind, y_hat)
+        print(lr.evaluate_model(dep, y_hat))
 
 
 if __name__ == "__main__":

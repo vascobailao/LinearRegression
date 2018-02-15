@@ -316,7 +316,7 @@ class UnivariateLR(Regression):
     :return {Numpy.Array} y_hat
     '''
     def predict(self, m, b):
-        y_hat = self.x.x*m + b
+        y_hat = self.x*m + b
         return y_hat
 
     '''
