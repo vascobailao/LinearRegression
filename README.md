@@ -8,9 +8,9 @@ This code check a predefined directory and automatically decides wether to creat
 
 This project is divided in 3 files:
 
-* ``` Model.py ```
-* ``` Regression.py ``` 
-* ``` main.py ```
+* ``` Model.py ``` - check directory, data pre-processing
+* ``` Regression.py ``` - Analyses the data and decides which sub type of regression should call
+* ``` main.py ``` - Wrapper
 
 
 ## Getting Started
