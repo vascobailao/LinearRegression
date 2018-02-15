@@ -1,7 +1,6 @@
 import Model
 import Regression as rg
 
-
 def main():
 
     new_model = Model.Model("./data/student", ".csv")
