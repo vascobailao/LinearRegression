@@ -12,6 +12,8 @@ class Regression:
         self.dic = dic
 
     '''
+    Splits the dictionary in training, testing and validation data set
+    
     :returns {Pandas.Dataframe} training_data, test_data
     '''
     def split_data(self):
@@ -26,6 +28,8 @@ class Regression:
         return training_data, test_data
 
     '''
+    Return size of dataset
+    
     :param {Pandas.Dataframe} training_data
     :return {np.int64} 
     '''
@@ -33,6 +37,8 @@ class Regression:
         return np.size(training_data)
 
     '''
+    Returns shape of datset
+    
     :param {Pandas.Dataframe} training_data
     :return {tuple} size
     '''
@@ -41,6 +47,8 @@ class Regression:
         return size
 
     '''
+    Returns a list with column names
+    
     :param {Pandas,Dataframe} training_data
     :return {list} column_names
     '''
@@ -49,6 +57,8 @@ class Regression:
         return columns_names
 
     '''
+    Submethod of split data (training set)
+    
     :return {Pandas.Dataframe} df
     '''
     def get_trainingData(self):
@@ -59,6 +69,7 @@ class Regression:
         return df
 
     '''
+    Submethod of split data (test set)
     :return {Pandas.Dataframe} df
     '''
     def get_testData(self):
@@ -68,6 +79,7 @@ class Regression:
         return df
 
     '''
+    Submethod of split data (validation set)
     :return {Pandas.Dataframe} df
     '''
     def get_validationData(self):
@@ -77,6 +89,8 @@ class Regression:
         return df
 
     '''
+    Divides the training set in independent and dependent sets
+    
     :params {list} (column names), {Pandas.Dataframe} training data
     :return {Numpy.Array} independent, dependent (variable)
     '''
@@ -93,6 +107,8 @@ class Regression:
         return independent, dependent
 
     '''
+    Plots the training data
+    
     :param {Pandas.Dataframe} training_data, {Numpy.Array} independent, dependent (variables)
     '''
     def plot_data(self, training_data, independent, dependent):
@@ -111,6 +127,8 @@ class Regression:
             raise ValueError("Data too dimensional to plot")
 
     '''
+    Calculares the Root Mean Squared Error of the model
+    
     :params {Numpy.Array} y, y_hat
     :return {int} rmse
     '''
@@ -119,6 +137,8 @@ class Regression:
         return rmse
 
     '''
+    Calculates the R2-measure of the model
+    
     :params {Numpy.Array} y, y_hat
     :return {int} r2
     '''
@@ -130,6 +150,8 @@ class Regression:
         return r2
 
     '''
+    Evaluation model routine
+    
     :params {Numpy.Array} y, y_hat
     :return {int} r2, rmse
     '''
@@ -139,6 +161,8 @@ class Regression:
         return r2, rmse
 
     '''
+    Run routine of Regression
+    
     :param {Numpy.Array} training_data
     :return {MultivariateLR or UnivariateLR} lr
     '''
@@ -164,6 +188,8 @@ class MultivariateLR(Regression):
         self.x = self.prepare_x()
 
     '''
+    Prepares x for calculations, adding one column of 1's
+    
     :return {Numpy.Array} self.x
     '''
     def prepare_x(self):
@@ -171,6 +197,8 @@ class MultivariateLR(Regression):
         return self.x
 
     '''
+    Returns the cost at a given iteration
+    
     :return {int} cost
     '''
     def cost_function(self):
@@ -178,6 +206,8 @@ class MultivariateLR(Regression):
         return cost
 
     '''
+    Performs the gradient descent optimization algofithm
+    
     :return {int} B, {list} cost_history
     '''
     def gradient_descent(self):
@@ -200,6 +230,8 @@ class MultivariateLR(Regression):
         return B, cost_history
 
     '''
+    Plot the cost history
+    
     :params {list} cost_history
     '''
     def plot_cost(self, cost_history):
@@ -207,13 +239,18 @@ class MultivariateLR(Regression):
         plt.show()
 
     '''
+    Returns a numpy array with the predictions
+    
     :params {Numpy.Array} B
     :return {Numpy.Array} y:hat
     '''
     def predict(self, B):
         y_hat = self.x.dot(B)
         return y_hat
+
     '''
+    Run routine of MultivariateLR
+    
     :return {Numpy.Array} B
     '''
     def run(self, **kwargs):
@@ -228,6 +265,11 @@ class UnivariateLR(Regression):
         self.y = y
         self.size = len(x)
 
+    '''
+    Comoutes the parameters using OLS
+    
+    :return {int} m, {int} b
+    '''
     def get_params(self):
 
         first = self.size*np.sum(self.x*self.y) - (np.sum(self.y)*np.sum(self.x))
@@ -237,13 +279,29 @@ class UnivariateLR(Regression):
         b = (np.sum(self.y)-m*np.sum(self.x))/self.size
         return m, b
 
+    '''
+    Computes the residual average error
+    
+    :param {int} m, {int} b
+    :return {numpy.float64} residuals'''
     def get_residuals(self, m, b):
-        self.residuals = np.sum((self.y-self.x*m-b)**2)
-        return self.residuals
+        residuals = np.sum((self.y-self.x*m-b)**2)
+        return residuals
 
+    '''
+    Returns the predictions using the parameters computed above
+    
+    :param {int} m, {int} b
+    :return {Numpy.Array}
+    '''
     def fit_LR(self, m, b):
         return np.array(self.x*m + b)
 
+    '''
+    Plots the refression line and the data points
+    
+    :param {int} m, {int} b
+    '''
     def plot_line_train(self, m, b):
 
         results = self.fit_LR(m, b)
@@ -251,13 +309,23 @@ class UnivariateLR(Regression):
         plt.plot(self.x, results, '--', color="r")
         plt.show()
 
+    '''
+    Returns a numpy array with the predictions
+    
+    :param {int} m, {int} b
+    :return {Numpy.Array} y_hat
+    '''
     def predict(self, m, b):
         y_hat = self.x.x*m + b
         return y_hat
 
+    '''
+    Run routine of UnivariateLR
+    
+    :return {int} m,b
+    '''
     def run(self, **kwargs):
 
         m, b = self.get_params()
         return m, b
         #self.plot_line_train(m, b)
-

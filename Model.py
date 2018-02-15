@@ -10,6 +10,8 @@ class Model:
         self.ext = ext
 
     '''
+    Check extension of files
+    
     :param {string} ext
     :return {string} ext or ValueError
     '''
@@ -19,6 +21,8 @@ class Model:
         return ext
 
     '''
+    Load Pandas.Dataframes objects
+    
     :param {string} path
     :return {Pandas.Dataframe}
     '''
@@ -26,6 +30,8 @@ class Model:
         return pd.read_csv(path)
 
     '''
+    Returns list of files in directory
+    
     :return {list} files
     '''
     def set_files_in_directory(self):
@@ -42,6 +48,8 @@ class Model:
         return files
 
     '''
+    Return training, test and validation sets
+    
     :params {list} set_type, {list} files
     :return {Pandas.Dataframe} df
     '''
@@ -54,6 +62,8 @@ class Model:
         return df
 
     '''
+    Returns data structure (dictionary) with dataset divided in training, test and validation set
+    
     :param {list} files
     :return {dictionary} df
     '''

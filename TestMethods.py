@@ -1,8 +1,7 @@
 import unittest
-import Model, Regression, UnivariateRegression, MultivariateRegression
+import Model, Regression
 import pandas as pd
 import numpy as np
-from pandas.util.testing import check_output
 
 class TestMethods(unittest.TestCase):
 
