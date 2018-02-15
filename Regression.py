@@ -64,11 +64,12 @@ class Regression:
         return independent, dependent
 
     def plot_data(self, training_data, independent, dependent):
+        print(self.get_shape(training_data)[1])
         if self.get_shape(training_data)[1] == 1:
             plt.plot(independent, dependent, '.')
             plt.show()
 
-        if self.get_shape(training_data)[1] == 2:
+        elif self.get_shape(training_data)[1] > 2:
             fig = plt.figure()
             ax = Axes3D(fig)
             ax.scatter(independent[:, 0], independent[:, 1], dependent, color='#ef1234')
@@ -88,6 +89,11 @@ class Regression:
         r2 = 1 - (ss_res / ss_tot)
         return r2
 
+    def evaluate_model(self, y, y_hat):
+        r2 = self.calculate_r2(y, y_hat)
+        rmse = self.calculate_rmse(y, y_hat)
+        return r2, rmse
+
     def run(self, training_data):
         x, y = self.get_data(self.get_columnNames(training_data), training_data)
         if len(self.get_columnNames(training_data)) > 2:
@@ -100,12 +106,18 @@ class Regression:
 class MultivariateLR(Regression):
 
     def __init__(self, x, y, learning_rate, iterations):
-        self.x = x.T
-        self.y = y
         self.size = len(x)
-        self.B = np.zeros((self.size,), dtype=int)
+        self.x0 = np.ones(self.size)
+        self.x = x
+        self.y = y
+        self.B = np.zeros((self.x.shape[1]+1,), dtype=int)
         self.learning_rate = learning_rate
         self.iterations = iterations
+        self.x = self.prepare_x()
+
+    def prepare_x(self):
+        self.x = np.concatenate((np.ones(self.size)[:, np.newaxis], self.x), axis=1)
+        return self.x
 
     def cost_function(self):
         cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
@@ -113,6 +125,7 @@ class MultivariateLR(Regression):
 
     def gradient_descent(self):
         cost_history = [0] * self.iterations
+
 
         for iteration in range(self.iterations):
 
@@ -122,16 +135,24 @@ class MultivariateLR(Regression):
 
             gradient = self.x.T.dot(loss) / self.size
 
-            self.B = self.B - self.learning_rate * gradient
+            B = self.B - self.learning_rate * gradient
 
             cost = self.cost_function()
             cost_history[iteration] = cost
 
-        return self.B, cost_history
+        return B, cost_history
+
+    def plot_cost(self, cost_history):
+        plt.plot(self.iterations, cost_history)
+        plt.show()
+
+    def predict(self, B):
+        y_hat = self.x.dot(B)
+        return y_hat
 
     def run(self, **kwargs):
         B, cost_history = self.gradient_descent()
-        return B, cost_history
+        return B
 
 
 class UnivariateLR(Regression):
@@ -163,6 +184,10 @@ class UnivariateLR(Regression):
         plt.scatter(self.x, self.y, color="b", s=2)
         plt.plot(self.x, results, '--', color="r")
         plt.show()
+
+    def predict(self, m, b):
+        y_hat = self.x.x*m + b
+        return y_hat
 
     def run(self, **kwargs):
 
