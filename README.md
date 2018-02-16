@@ -8,7 +8,7 @@ This code checks a predefined directory and automatically decides whether to cre
 
 This project is divided in 3 files:
 
-* ``` Model.py ``` - check directory, data pre-processing
+* ``` Model.py ``` - checks predefined directory (set on main), performs data pre-processing
 * ``` Regression.py ``` - Analyses the data and decides which sub type of regression should call
 * ``` main.py ``` - Main file
 
