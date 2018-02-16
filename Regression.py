@@ -210,10 +210,8 @@ class MultivariateLR(Regression):
     :return {int} B, {list} cost_history
     '''
     def gradient_descent(self):
-<<<<<<< HEAD
         cost_history = []
         loss_history = []
-
         B = np.zeros((self.x.shape[1],), dtype=int)
 
         for iteration in range(self.iterations):
@@ -225,18 +223,6 @@ class MultivariateLR(Regression):
             B = B - self.learning_rate * gradient
             cost = self.cost_function(B)
             cost_history.append(cost)
-            print(cost)
-=======
-        cost_history = [0] * self.iterations
-        
-        for iteration in range(self.iterations):
-            y_hat = self.x.dot(self.B)
-            loss = y_hat - self.y
-            gradient = self.x.T.dot(loss) / self.size
-            B = self.B - self.learning_rate * gradient
-            cost = self.cost_function()
-            cost_history[iteration] = cost
->>>>>>> 98d9daf25275206567698e34ee556065afc60a7f
 
         return B, cost_history
 
