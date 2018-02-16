@@ -182,7 +182,6 @@ class MultivariateLR(Regression):
         self.x0 = np.ones(self.size)
         self.x = x
         self.y = y
-        self.B = np.zeros((self.x.shape[1]+1,), dtype=int)
         self.learning_rate = learning_rate
         self.iterations = iterations
         self.x = self.prepare_x()
@@ -201,8 +200,8 @@ class MultivariateLR(Regression):
     
     :return {int} cost
     '''
-    def cost_function(self):
-        cost = np.sum((self.x.dot(self.B) - self.y) ** 2) / (2 * self.size)
+    def cost_function(self, B):
+        cost = np.sum((self.x.dot(B) - self.y) ** 2) / (2 * self.size)
         return cost
 
     '''
@@ -211,21 +210,21 @@ class MultivariateLR(Regression):
     :return {int} B, {list} cost_history
     '''
     def gradient_descent(self):
-        cost_history = [0] * self.iterations
+        cost_history = []
+        loss_history = []
 
+        B = np.zeros((self.x.shape[1],), dtype=int)
 
         for iteration in range(self.iterations):
 
-            y_hat = self.x.dot(self.B)
-
+            y_hat = self.x.dot(B)
             loss = y_hat - self.y
-
+            loss_history.append(loss)
             gradient = self.x.T.dot(loss) / self.size
-
-            B = self.B - self.learning_rate * gradient
-
-            cost = self.cost_function()
-            cost_history[iteration] = cost
+            B = B - self.learning_rate * gradient
+            cost = self.cost_function(B)
+            cost_history.append(cost)
+            print(cost)
 
         return B, cost_history
 
@@ -235,7 +234,7 @@ class MultivariateLR(Regression):
     :params {list} cost_history
     '''
     def plot_cost(self, cost_history):
-        plt.plot(self.iterations, cost_history)
+        plt.plot(range(0, len(cost_history)), cost_history)
         plt.show()
 
     '''
@@ -255,7 +254,7 @@ class MultivariateLR(Regression):
     '''
     def run(self, **kwargs):
         B, cost_history = self.gradient_descent()
-        return B
+        return B, cost_history
 
 
 class UnivariateLR(Regression):

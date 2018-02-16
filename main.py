@@ -25,10 +25,10 @@ def main():
         y_hat = lr.predict(m, b)
         print(lr.evaluate_model(ind, y_hat))
     elif lr.__class__.__name__ == "MultivariateLR":
-        B = lr.run()
-        print(B)
+        B, cost_history = lr.run()
         y_hat = lr.predict(B)
         print(lr.evaluate_model(dep, y_hat))
+        lr.plot_cost(cost_history)
 
 
 if __name__ == "__main__":
