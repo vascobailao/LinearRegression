@@ -212,18 +212,12 @@ class MultivariateLR(Regression):
     '''
     def gradient_descent(self):
         cost_history = [0] * self.iterations
-
-
+        
         for iteration in range(self.iterations):
-
             y_hat = self.x.dot(self.B)
-
             loss = y_hat - self.y
-
             gradient = self.x.T.dot(loss) / self.size
-
             B = self.B - self.learning_rate * gradient
-
             cost = self.cost_function()
             cost_history[iteration] = cost
 
@@ -266,7 +260,7 @@ class UnivariateLR(Regression):
         self.size = len(x)
 
     '''
-    Comoutes the parameters using OLS
+    Computes the parameters using OLS
     
     :return {int} m, {int} b
     '''
