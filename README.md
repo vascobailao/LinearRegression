@@ -23,7 +23,7 @@ python main.py
 
 ### Prerequisites
 
-Build with
+Built with
 
 * Python 3
 
