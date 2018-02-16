@@ -4,7 +4,7 @@ Univariate and multivariate linear regression model using OLS and gradient desce
 
 ## Description
 
-This code check a predefined directory and automatically decides wether to create a univariate regression model or a multi variate regression model.
+This code checks a predefined directory and automatically decides whether to create a univariate regression model or a multi variate regression model.
 
 This project is divided in 3 files:
 
@@ -23,10 +23,6 @@ python main.py
 
 ### Prerequisites
 
-Built with
-
-* Python 3
-
 Packages used:
 
 * Numpy
@@ -43,6 +39,8 @@ python TestMethods.py
 ```
 
 ## Built With
+
+* Python 3
 
 * PyCharm 2017.03
 
