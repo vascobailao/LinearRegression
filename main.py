@@ -3,7 +3,7 @@ import Regression as rg
 
 def main():
 
-    new_model = Model.Model("./data/student", ".csv")
+    new_model = Model.Model("./data/simple", ".csv")
 
     files = new_model.set_files_in_directory()
 
@@ -24,6 +24,9 @@ def main():
         print(m, b)
         y_hat = lr.predict(m, b)
         print(lr.evaluate_model(ind, y_hat))
+        m, b = lr.get_params_history()
+        lr.plot_history_m(m)
+
     elif lr.__class__.__name__ == "MultivariateLR":
         B, cost_history = lr.run()
         y_hat = lr.predict(B)

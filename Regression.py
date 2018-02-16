@@ -212,6 +212,7 @@ class MultivariateLR(Regression):
     def gradient_descent(self):
         cost_history = []
         loss_history = []
+
         B = np.zeros((self.x.shape[1],), dtype=int)
 
         for iteration in range(self.iterations):
@@ -276,6 +277,22 @@ class UnivariateLR(Regression):
         b = (np.sum(self.y)-m*np.sum(self.x))/self.size
         return m, b
 
+
+    '''
+    :returns {list] m_history, b_history
+    '''
+    def get_params_history(self):
+        m_history = []
+        b_history = []
+        for i in range(0, len(self.x)):
+            first = self.size * (self.x[i] * self.y[i]) - ((self.y[i]) * (self.x[i]))
+            second = self.size * (self.x[i] ** 2) - (self.x[i]) ** 2
+            m = first / second
+            b = (self.y[i]) - m * (self.x[i]) / self.size
+            m_history.append(m)
+            b_history.append(b)
+        return m_history, b_history
+
     '''
     Computes the residual average error
     
@@ -304,6 +321,25 @@ class UnivariateLR(Regression):
         results = self.fit_LR(m, b)
         plt.scatter(self.x, self.y, color="b", s=2)
         plt.plot(self.x, results, '--', color="r")
+        plt.show()
+
+    '''
+    Plots the refression line and the data points
+
+    :param {int} m, {int} b
+    '''
+    def plot_history_m(self, m_history):
+        print(m_history)
+        plt.plot(range(0, len(m_history)), m_history)
+        plt.show()
+
+    '''
+    Plots the refression line and the data points
+
+    :param {int} m, {int} b
+    '''
+    def plot_history_bb(self, b_history):
+        plt.plot(range(0, len(b_history)), b_history)
         plt.show()
 
     '''
