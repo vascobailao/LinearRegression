@@ -10,7 +10,7 @@ This project is divided in 3 files:
 
 * ``` Model.py ``` - check directory, data pre-processing
 * ``` Regression.py ``` - Analyses the data and decides which sub type of regression should call
-* ``` main.py ``` - Wrapper
+* ``` main.py ``` - Main file
 
 
 ## Getting Started
@@ -22,6 +22,11 @@ python main.py
 ```
 
 ### Prerequisites
+
+Build with
+
+* Python 3
+
 Packages used:
 
 * Numpy
